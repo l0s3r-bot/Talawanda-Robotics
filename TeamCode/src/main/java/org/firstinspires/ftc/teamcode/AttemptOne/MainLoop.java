@@ -4,12 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-@TeleOp(name = "Talawanda - main loop - java", group="Competition")
+@TeleOp(name = "Launcher/Webcam ONLY", group="Competition")
 public class MainLoop extends LinearOpMode {
-    TalaDriveController driveController;
+    //TalaDriveController driveController;
     TalaBallController launcherController;
-    TalaSlideLiftController slideController;
-//Hello? Harrow?
+    WebcamHandler Webcam;
+    //TalaSlideLiftController slideController;
 
   /**
    * This OpMode illustrates how to program your robot to drive field relative. This means
@@ -22,26 +22,29 @@ public class MainLoop extends LinearOpMode {
    */
   @Override
   public void runOpMode() {
-        driveController = new TalaDriveController();
+        //driveController = new TalaDriveController();
         launcherController = new TalaBallController();
-        slideController = new TalaSlideLiftController();
+        Webcam = new WebcamHandler();
+        //slideController = new TalaSlideLiftController();
 
-        driveController.initialize(this);
+        //driveController.initialize(this);
         launcherController.initialize(this);
-        slideController.slide_init(this);
+        Webcam.initialize(this);
+        //slideController.slide_init(this);
 
     waitForStart();
       // Put run blocks here.
       while (opModeIsActive()) {
         // Put loop blocks here.
-            driveController.handleControlsInLoop(this);
+            //driveController.handleControlsInLoop(this);
             launcherController.handleLauncherControlsInLoop(this);
-            slideController.handleSlideControlsInLoop(this);
+            //slideController.handleSlideControlsInLoop(this);
 
 
-            driveController.addTelemetryOutput(this);
+            //driveController.addTelemetryOutput(this);
             launcherController.launcherTelemetry(this);
-            slideController.slideTelemetry(this);
+            Webcam.telemetryAprilTag(this);
+            //slideController.slideTelemetry(this);
        
    
             telemetry.update();
