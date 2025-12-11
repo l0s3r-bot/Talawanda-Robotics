@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class TalaBallController{
-    private Servo launcherTilt;
+    //private Servo launcherTilt;
     private DcMotor launcherFront;
     private DcMotor launcherRear;
     private CRServo launcherPrimer;
@@ -18,14 +18,14 @@ public class TalaBallController{
 
     public void initialize (LinearOpMode opMode) {
 
-        launcherTilt = opMode.hardwareMap.get(Servo.class, "launcherTilt");
+        //launcherTilt = opMode.hardwareMap.get(Servo.class, "launcherTilt");
         launcherFront = opMode.hardwareMap.get(DcMotor.class, "launcherFront");
         launcherRear = opMode.hardwareMap.get(DcMotor.class, "launcherRear");
         launcherPrimer = opMode.hardwareMap.get(CRServo.class, "launcherPrimer");
 
 
-        launcherTilt.scaleRange(0.55, 0.675);
-        launcherTilt.setDirection(Servo.Direction.REVERSE);
+        //launcherTilt.scaleRange(0.55, 0.675);
+        //launcherTilt.setDirection(Servo.Direction.REVERSE);
         launcherPrimer.setDirection(CRServo.Direction.REVERSE);
         launcherRPM = 2250;
         launcherRear.setDirection(DcMotor.Direction.REVERSE);
@@ -34,7 +34,7 @@ public class TalaBallController{
     }
 
     public void launcherTelemetry(LinearOpMode opMode) {
-        opMode.telemetry.addData("launcher_lift", launcherTilt.getPosition());
+        //opMode.telemetry.addData("launcher_lift", launcherTilt.getPosition());
         opMode.telemetry.addData("launcherRPM", launcherRPM);
         opMode.telemetry.addData("LauncherTPS", launcherTPS);
     }
@@ -48,7 +48,7 @@ public class TalaBallController{
             ((DcMotorEx) launcherFront).setVelocity(0);
             ((DcMotorEx) launcherRear).setVelocity(0);
         }
-        launcherTilt.setPosition(opMode.gamepad2.left_trigger);
+        //launcherTilt.setPosition(opMode.gamepad2.left_trigger);
         if (opMode.gamepad2.left_bumper) {
             launcherPrimer.setPower(1);
         } else {
@@ -58,8 +58,8 @@ public class TalaBallController{
     }
 
     private void launcher_init() {
-        launcherTilt.scaleRange(0.55, 0.675);
-        launcherTilt.setDirection(Servo.Direction.REVERSE);
+        //launcherTilt.scaleRange(0.55, 0.675);
+       // launcherTilt.setDirection(Servo.Direction.REVERSE);
         launcherPrimer.setDirection(CRServo.Direction.REVERSE);
         launcherRPM = 2250;
         launcherRear.setDirection(DcMotor.Direction.REVERSE);
