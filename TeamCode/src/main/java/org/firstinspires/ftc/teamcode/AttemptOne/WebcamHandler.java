@@ -39,17 +39,30 @@ public class WebcamHandler {
 
     }   // end method initAprilTag()
 
-
-    public void telemetryAprilTag(LinearOpMode opMode) {
+    public void telemetryAprilTag(LinearOpMode opMode, String team_color) {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         opMode.telemetry.addData("# AprilTags Detected", currentDetections.size());
+
+        int RED_TAG_ID = 24;
+        int BLUE_TAG_ID = 20;
+        int current_tag_id= 0;
+
+
+        if (team_color.equals("BLUE"))
+        {
+            current_tag_id = BLUE_TAG_ID;
+        }
+        else if (team_color.equals("RED"))
+        {
+            current_tag_id = RED_TAG_ID;
+        }
 
         AprilTagDetection currentGoalTag = null;
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
 
-            if (detection.id == 20) {
+            if (detection.id == current_tag_id) {
                 currentGoalTag = detection;
             }
             if (detection.metadata != null) {
@@ -61,18 +74,23 @@ public class WebcamHandler {
                 opMode.telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 opMode.telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
             }
-        }   // end for() loop
 
+            double MARGIN_OF_ERROR = 1.5;
 
-        if /// no target found
-        opMode.telemetry.addLine("No target");
-        else if(//aim is perfect)
+            if (detection.id != current_tag_id) {
+                opMode.telemetry.addLine("No target");
+            }
+            else if(Math.abs(detection.ftcPose.bearing) <= MARGIN_OF_ERROR){
                 opMode.telemetry.addLine("ON TARGET, FIRE AWAY");
-        else if( //should turn left){
-                opMode.telemetry.addLine("TURN LEFT");
+            }
+            else if(detection.ftcPose.bearing > 0){
+            opMode.telemetry.addLine("TURN LEFT");
+            }
+            else if(detection.ftcPose.bearing < 0)
+            opMode.telemetry.addLine("TURN RIGHT");
 
-                else if(//should turn right)
-                opMode.telemetry.addLine("TURN RIGHT");
+
+        }   // end for() loop
 
 
         // Add "key" information to telemetry
