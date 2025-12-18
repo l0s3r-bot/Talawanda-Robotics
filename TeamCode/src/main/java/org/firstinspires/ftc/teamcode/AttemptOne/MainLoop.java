@@ -4,9 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-@TeleOp(name = "Launcher/Webcam ONLY", group="Competition")
 public class MainLoop extends LinearOpMode {
-    //TalaDriveController driveController;
+
+    public String team_color(){
+        return "";
+    }
+
+    TalaDriveController driveController;
     //TalaBallController launcherController;
     WebcamHandler Webcam;
     //TalaSlideLiftController slideController;
@@ -18,16 +22,17 @@ public class MainLoop extends LinearOpMode {
    * This OpMode assumes that you have four mecanum wheels each on its own motor named:
    *  front_left_motor, front_right_motor, back_left_motor, back_right_motor
    *
-   * and that the left motors are flipped such that when they turn clockwise the wheel moves backwards
+   * and that the left motors are flipped such that when they turn clockwise the wheel
+   * moves backwards
    */
   @Override
   public void runOpMode() {
-        //driveController = new TalaDriveController();
+        driveController = new TalaDriveController();
         //launcherController = new TalaBallController();
         Webcam = new WebcamHandler();
         //slideController = new TalaSlideLiftController();
 
-        //driveController.initialize(this);
+        driveController.initialize(this);
         //launcherController.initialize(this);
         Webcam.initialize(this);
         //slideController.slide_init(this);
@@ -36,14 +41,14 @@ public class MainLoop extends LinearOpMode {
       // Put run blocks here.
       while (opModeIsActive()) {
         // Put loop blocks here.
-            //driveController.handleControlsInLoop(this);
+            driveController.handleControlsInLoop(this);
             //launcherController.handleLauncherControlsInLoop(this);
             //slideController.handleSlideControlsInLoop(this);
 
 
-            //driveController.addTelemetryOutput(this);
+            driveController.addTelemetryOutput(this);
             //launcherController.launcherTelemetry(this);
-            Webcam.telemetryAprilTag(this, "BLUE"); //Change string to change teams!
+            Webcam.telemetryAprilTag(this, team_color()); //Change string to change teams!
             //slideController.slideTelemetry(this);
        
    
