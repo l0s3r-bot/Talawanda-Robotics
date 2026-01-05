@@ -19,15 +19,15 @@ public class TalaBallController{
     public void initialize (LinearOpMode opMode) {
 
         //launcherTilt = opMode.hardwareMap.get(Servo.class, "launcherTilt");
-        launcherFront = opMode.hardwareMap.get(DcMotor.class, "launcherFront");
-        launcherRear = opMode.hardwareMap.get(DcMotor.class, "launcherRear");
+        launcherFront = opMode.hardwareMap.get(DcMotor.class, "launcherLeft");
+        launcherRear = opMode.hardwareMap.get(DcMotor.class, "launcherRight");
         launcherPrimer = opMode.hardwareMap.get(CRServo.class, "launcherPrimer");
 
 
         //launcherTilt.scaleRange(0.55, 0.675);
         //launcherTilt.setDirection(Servo.Direction.REVERSE);
         launcherPrimer.setDirection(CRServo.Direction.REVERSE);
-        launcherRPM = 2250;
+        launcherRPM = 5000;
         launcherRear.setDirection(DcMotor.Direction.REVERSE);
         launcherRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
