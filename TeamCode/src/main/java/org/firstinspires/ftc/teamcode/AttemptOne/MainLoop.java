@@ -11,7 +11,7 @@ public class MainLoop extends LinearOpMode {
     }
 
     TalaDriveController driveController;
-    //TalaBallController launcherController;
+    TalaBallController launcherController;
     WebcamHandler Webcam;
     //TalaSlideLiftController slideController;
 
@@ -28,12 +28,12 @@ public class MainLoop extends LinearOpMode {
   @Override
   public void runOpMode() {
         driveController = new TalaDriveController();
-        //launcherController = new TalaBallController();
+        launcherController = new TalaBallController();
         Webcam = new WebcamHandler();
         //slideController = new TalaSlideLiftController();
 
         driveController.initialize(this);
-        //launcherController.initialize(this);
+        launcherController.initialize(this);
         Webcam.initialize(this);
         //slideController.slide_init(this);
 
@@ -41,13 +41,13 @@ public class MainLoop extends LinearOpMode {
       // Put run blocks here.
       while (opModeIsActive()) {
         // Put loop blocks here.
-            driveController.handleControlsInLoop(this);
-            //launcherController.handleLauncherControlsInLoop(this);
+            driveController.handleControlsInLoop(this , Webcam);
+            launcherController.handleLauncherControlsInLoop(this);
             //slideController.handleSlideControlsInLoop(this);
 
 
             driveController.addTelemetryOutput(this);
-            //launcherController.launcherTelemetry(this);
+            launcherController.launcherTelemetry(this);
             Webcam.telemetryAprilTag(this, team_color()); //Change string to change teams!
             //slideController.slideTelemetry(this);
        
