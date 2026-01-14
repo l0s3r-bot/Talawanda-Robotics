@@ -21,9 +21,10 @@ public class TalaDriveController  {
     mFR = opMode.hardwareMap.get(DcMotor.class, "mFR");
     mBR = opMode.hardwareMap.get(DcMotor.class, "mBR");
 
-    
-    mBL.setDirection(DcMotor.Direction.REVERSE);
+
+    mBR.setDirection(DcMotor.Direction.REVERSE);
     mFR.setDirection(DcMotor.Direction.REVERSE);
+
     // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder wires, you should remove these
     mFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     mFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -45,6 +46,8 @@ public class TalaDriveController  {
       }
       driveBot(drive, strafe, turn);
 
+
+
   }
 
 
@@ -53,7 +56,7 @@ public class TalaDriveController  {
     public void driveBot(double drive, double strafe, double turn) {
 
 
-        double frontLeftPower    =  drive - strafe - turn;
+      double frontLeftPower    =  drive - strafe - turn;
       double frontRightPower   =  drive + strafe + turn;
       double backLeftPower     =  drive + strafe - turn;
       double backRightPower    =  drive - strafe + turn;
@@ -84,6 +87,7 @@ public class TalaDriveController  {
         opMode.telemetry.addLine("Hold left bumper to drive in robot relative");
         opMode.telemetry.addLine("The left joystick sets the robot direction");
         opMode.telemetry.addLine("Moving the right joystick left and right turns the robot");
+        opMode.telemetry.addLine("Press right bumper to enter crawl mode");
     }
 
 

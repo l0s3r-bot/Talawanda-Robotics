@@ -12,8 +12,7 @@ public class MainWithIntake extends LinearOpMode {
     public String team_color(){
         return "";
     }
-
-//    TalaDriveController driveController;
+    TalaDriveController driveController;
   //  TalaBallController launcherController;
     //WebcamHandler Webcam;
     //TalaSlideLiftController slideController;
