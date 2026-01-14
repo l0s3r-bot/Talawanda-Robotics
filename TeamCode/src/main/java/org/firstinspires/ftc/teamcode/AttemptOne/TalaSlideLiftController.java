@@ -12,12 +12,15 @@ public class TalaSlideLiftController {
   int LSF_OG_POS;
 
 
+
 public void slide_init(LinearOpMode opMode) {
     lSF = opMode.hardwareMap.get(DcMotor.class, "lSL");
     lSR = opMode.hardwareMap.get(DcMotor.class, "lSR");
 
     lSF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     lSR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+    lSR.setDirection(DcMotor.Direction.REVERSE);
 
     Slide_Posistion_relative = 0;
     LSR_OG_POS = lSR.getCurrentPosition();
