@@ -111,6 +111,7 @@ public class WebcamHandler {
         }
 
 
+
 /*
         // Step through the list of detections and display info for each one.
          if (currentGoalTag.metadata != null) {

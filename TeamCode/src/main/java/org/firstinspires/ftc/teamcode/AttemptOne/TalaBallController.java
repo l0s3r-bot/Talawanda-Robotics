@@ -11,12 +11,18 @@ public class TalaBallController{
     private DcMotor launcherFront;
     private DcMotor launcherRear;
     private CRServo launcherPrimer;
-
+    private CRServo ballLiftWheel;
+    private CRServo intakeWheel;
     double launcherTPS;
 
     int launcherRPM;
 
     public void initialize (LinearOpMode opMode) {
+
+         ballLiftWheel = opMode.hardwareMap.get(CRServo.class, "ballLiftWheel");
+         intakeWheel = opMode.hardwareMap.get(CRServo.class, "intakeWheel");
+        intakeWheel.setDirection(DcMotor.Direction.REVERSE);
+
 
         //launcherTilt = opMode.hardwareMap.get(Servo.class, "launcherTilt");
         launcherFront = opMode.hardwareMap.get(DcMotor.class, "launcherLeft");
@@ -55,6 +61,16 @@ public class TalaBallController{
             launcherPrimer.setPower(0);
         }
         launcherRPM += Math.round(opMode.gamepad2.right_stick_y * 20);
+
+        if (opMode.gamepad2.b)
+        {
+            ballLiftWheel.setPower(1);
+            intakeWheel.setPower(1);
+
+        } else {
+            ballLiftWheel.setPower(0);
+            intakeWheel.setPower(0);
+        }
     }
 
     private void launcher_init() {
