@@ -7,34 +7,40 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class TalaBallController{
-    private Servo launcherTilt;
+    //private Servo launcherTilt;
     private DcMotor launcherFront;
     private DcMotor launcherRear;
     private CRServo launcherPrimer;
-
+    private CRServo ballLiftWheel;
+    private CRServo intakeWheel;
     double launcherTPS;
 
     int launcherRPM;
 
     public void initialize (LinearOpMode opMode) {
 
-        launcherTilt = opMode.hardwareMap.get(Servo.class, "launcherTilt");
-        launcherFront = opMode.hardwareMap.get(DcMotor.class, "launcherFront");
-        launcherRear = opMode.hardwareMap.get(DcMotor.class, "launcherRear");
+         ballLiftWheel = opMode.hardwareMap.get(CRServo.class, "ballLiftWheel");
+         intakeWheel = opMode.hardwareMap.get(CRServo.class, "intakeWheel");
+        intakeWheel.setDirection(DcMotor.Direction.REVERSE);
+
+
+        //launcherTilt = opMode.hardwareMap.get(Servo.class, "launcherTilt");
+        launcherFront = opMode.hardwareMap.get(DcMotor.class, "launcherLeft");
+        launcherRear = opMode.hardwareMap.get(DcMotor.class, "launcherRight");
         launcherPrimer = opMode.hardwareMap.get(CRServo.class, "launcherPrimer");
 
 
-        launcherTilt.scaleRange(0.55, 0.675);
-        launcherTilt.setDirection(Servo.Direction.REVERSE);
+        //launcherTilt.scaleRange(0.55, 0.675);
+        //launcherTilt.setDirection(Servo.Direction.REVERSE);
         launcherPrimer.setDirection(CRServo.Direction.REVERSE);
-        launcherRPM = 2250;
+        launcherRPM = 5000;
         launcherRear.setDirection(DcMotor.Direction.REVERSE);
         launcherRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void launcherTelemetry(LinearOpMode opMode) {
-        opMode.telemetry.addData("launcher_lift", launcherTilt.getPosition());
+        //opMode.telemetry.addData("launcher_lift", launcherTilt.getPosition());
         opMode.telemetry.addData("launcherRPM", launcherRPM);
         opMode.telemetry.addData("LauncherTPS", launcherTPS);
     }
@@ -48,18 +54,28 @@ public class TalaBallController{
             ((DcMotorEx) launcherFront).setVelocity(0);
             ((DcMotorEx) launcherRear).setVelocity(0);
         }
-        launcherTilt.setPosition(opMode.gamepad2.left_trigger);
+        //launcherTilt.setPosition(opMode.gamepad2.left_trigger);
         if (opMode.gamepad2.left_bumper) {
             launcherPrimer.setPower(1);
         } else {
             launcherPrimer.setPower(0);
         }
         launcherRPM += Math.round(opMode.gamepad2.right_stick_y * 20);
+
+        if (opMode.gamepad2.b)
+        {
+            ballLiftWheel.setPower(1);
+            intakeWheel.setPower(1);
+
+        } else {
+            ballLiftWheel.setPower(0);
+            intakeWheel.setPower(0);
+        }
     }
 
     private void launcher_init() {
-        launcherTilt.scaleRange(0.55, 0.675);
-        launcherTilt.setDirection(Servo.Direction.REVERSE);
+        //launcherTilt.scaleRange(0.55, 0.675);
+       // launcherTilt.setDirection(Servo.Direction.REVERSE);
         launcherPrimer.setDirection(CRServo.Direction.REVERSE);
         launcherRPM = 2250;
         launcherRear.setDirection(DcMotor.Direction.REVERSE);
