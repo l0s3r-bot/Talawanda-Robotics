@@ -13,7 +13,7 @@ public class TalaSlideLiftController {
 
 
 public void slide_init(LinearOpMode opMode) {
-    lSF = opMode.hardwareMap.get(DcMotor.class, "lSF");
+    lSF = opMode.hardwareMap.get(DcMotor.class, "lSL");
     lSR = opMode.hardwareMap.get(DcMotor.class, "lSR");
 
     lSF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
