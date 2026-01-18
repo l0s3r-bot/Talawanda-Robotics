@@ -13,7 +13,7 @@ public class MainLoop extends LinearOpMode {
     TalaDriveController driveController;
     TalaBallController launcherController;
     WebcamHandler Webcam;
-    TalaSlideLiftController slideController;
+//    TalaSlideLiftController slideController;
 
   /**
    * This OpMode illustrates how to program your robot to drive field relative. This means
@@ -30,28 +30,31 @@ public class MainLoop extends LinearOpMode {
         driveController = new TalaDriveController();
         launcherController = new TalaBallController();
         Webcam = new WebcamHandler();
-        slideController = new TalaSlideLiftController();
+//        slideController = new TalaSlideLiftController();
 
         driveController.initialize(this);
         launcherController.initialize(this);
         Webcam.initialize(this);
-        slideController.slide_init(this);
+//        slideController.slide_init(this);
 
     waitForStart();
       // Put run blocks here.
+
+
+
       while (opModeIsActive()) {
         // Put loop blocks here.
             driveController.handleControlsInLoop(this , Webcam);
             launcherController.handleLauncherControlsInLoop(this);
-            slideController.handleSlideControlsInLoop(this);
+//            slideController.handleSlideControlsInLoop(this);
 
 
             driveController.addTelemetryOutput(this);
             launcherController.launcherTelemetry(this);
             Webcam.telemetryAprilTag(this, team_color()); //Change string to change teams!
-            slideController.slideTelemetry(this);
-       
-   
+//            slideController.slideTelemetry(this);
+
+
             telemetry.update();
       } //ends while loop
   }

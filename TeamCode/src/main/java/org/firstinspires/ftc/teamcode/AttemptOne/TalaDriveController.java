@@ -2,18 +2,23 @@ package org.firstinspires.ftc.teamcode.AttemptOne;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class TalaDriveController  {
-  private DcMotor mBL;
-  private DcMotor mFL;
-  private DcMotor mFR;
-  private DcMotor mBR;
+  public DcMotor mBL;
+  public DcMotor mFL;
+  public DcMotor mFR;
+  public DcMotor mBR;
 
+    private ElapsedTime runtime = new ElapsedTime();
 
+    
   public void initialize(LinearOpMode opMode){
 
     mBL = opMode.hardwareMap.get(DcMotor.class, "mBL");
@@ -33,13 +38,17 @@ public class TalaDriveController  {
 
   }
 
+    
 
-  public void handleControlsInLoop(LinearOpMode opMode, WebcamHandler cam){
-      double drive = -opMode.gamepad1.left_stick_y / 1.0;  // Reduce drive rate to 50%.
-      double strafe = -opMode.gamepad1.left_stick_x / 1.0;  // Reduce strafe rate to 50%.
+
+
+    public void handleControlsInLoop(LinearOpMode opMode, WebcamHandler cam){
+      double driveSpeedCoefficient = opMode.gamepad1.left_trigger/2;
+      double drive = -(opMode.gamepad1.left_stick_y / driveSpeedCoefficient); // Reduce drive rate to 50%.
+      double strafe = -(opMode.gamepad1.left_stick_x / driveSpeedCoefficient); // Reduce strafe rate to 50%.
       double turn = 0;
       if (!opMode.gamepad1.left_bumper || (cam.getTargetHeading() == null)) {
-          turn = -opMode.gamepad1.right_stick_x / 2.0;  // Reduce turn rate to 33%.
+          turn = -(opMode.gamepad1.right_stick_x / driveSpeedCoefficient);  // Reduce turn rate to 33%.
 
       } else {
           turn = cam.getTargetHeading();
@@ -52,10 +61,8 @@ public class TalaDriveController  {
 
 
 
-
     public void driveBot(double drive, double strafe, double turn) {
-
-
+        
       double frontLeftPower    =  drive - strafe - turn;
       double frontRightPower   =  drive + strafe + turn;
       double backLeftPower     =  drive + strafe - turn;
@@ -91,5 +98,4 @@ public class TalaDriveController  {
     }
 
 
-
-}
+    }

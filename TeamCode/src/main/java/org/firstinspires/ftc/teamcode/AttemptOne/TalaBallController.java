@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class TalaBallController{
@@ -13,6 +14,9 @@ public class TalaBallController{
     private CRServo launcherPrimer;
     private CRServo ballLiftWheel;
     private CRServo intakeWheel;
+
+    private CRServo transferWheelLeft;
+    private CRServo transferWheelRight;
     double launcherTPS;
 
     double tiltValue = .45;
@@ -26,7 +30,12 @@ public class TalaBallController{
 
          ballLiftWheel = opMode.hardwareMap.get(CRServo.class, "ballLiftWheel");
          intakeWheel = opMode.hardwareMap.get(CRServo.class, "intakeWheel");
-        intakeWheel.setDirection(DcMotor.Direction.REVERSE);
+         transferWheelLeft = opMode.hardwareMap.get(CRServo.class,"transferWheelLeft");
+        transferWheelRight = opMode.hardwareMap.get(CRServo.class,"transferWheelRight");
+
+        intakeWheel.setDirection(DcMotor.Direction.FORWARD);
+        ballLiftWheel.setDirection(DcMotor.Direction.REVERSE);
+        transferWheelLeft.setDirection(CRServo.Direction.REVERSE);
 
 
         launcherTilt = opMode.hardwareMap.get(Servo.class, "launcherTilt");
@@ -38,14 +47,14 @@ public class TalaBallController{
         //launcherTilt.scaleRange(0.55, 0.675);
         //launcherTilt.setDirection(Servo.Direction.REVERSE);
         launcherPrimer.setDirection(CRServo.Direction.REVERSE);
-        launcherRPM = 5000;
+        launcherRPM = 2000;
         launcherRear.setDirection(DcMotor.Direction.REVERSE);
         launcherRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void launcherTelemetry(LinearOpMode opMode) {
-        opMode.telemetry.addData("launcher_lift", launcherTilt.getPosition());
+        opMode.telemetry.addData("launcher Tilt", launcherTilt.getPosition());
         opMode.telemetry.addData("launcherRPM", launcherRPM);
         opMode.telemetry.addData("LauncherTPS", launcherTPS);
     }
@@ -70,7 +79,7 @@ public class TalaBallController{
         if (opMode.gamepad1.b && !toggleButtonPressed)
         {
             intakeRunning = !intakeRunning;
-            toggleButtonPressed = true;
+                       toggleButtonPressed = true;
         }
         else if (!opMode.gamepad1.b)
         {
@@ -81,17 +90,21 @@ public class TalaBallController{
         {
             ballLiftWheel.setPower(1);
             intakeWheel.setPower(1);
+            transferWheelLeft.setPower(1);
+            transferWheelRight.setPower(1);
 
         } else {
             ballLiftWheel.setPower(0);
             intakeWheel.setPower(0);
+            transferWheelLeft.setPower(0);
+            transferWheelRight.setPower(0);
         }
 
-        if (opMode.gamepad1.dpad_up)
+        if (opMode.gamepad2.dpad_up)
         {
             tiltValue += .0033;
         }
-        if (opMode.gamepad1.dpad_down)
+        if (opMode.gamepad2.dpad_down)
         {
             tiltValue -= .0033;
         }
