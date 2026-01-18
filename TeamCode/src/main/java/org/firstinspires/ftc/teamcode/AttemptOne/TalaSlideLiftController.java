@@ -25,11 +25,17 @@ public void slide_init(LinearOpMode opMode) {
     Slide_Posistion_relative = 0;
     LSR_OG_POS = lSR.getCurrentPosition();
     LSF_OG_POS = lSF.getCurrentPosition();
-    Slide_Speed_Multiplier = 75;
+    Slide_Speed_Multiplier = 50;
 }
 
     public void handleSlideControlsInLoop(LinearOpMode opMode) {
-        Slide_Posistion_relative += Math.round(Slide_Speed_Multiplier * opMode.gamepad2.left_stick_y);
+        if (opMode.gamepad2.y) {
+            Slide_Posistion_relative += Slide_Speed_Multiplier;
+        }
+        if (opMode.gamepad2.a) {
+            Slide_Posistion_relative -= Slide_Speed_Multiplier;
+        }
+        // TODO: 1/18/26 change so does not activeate on m button on rear, perhaps change launcher tilt to gamepad1 left stick y
         lSF.setTargetPosition(LSF_OG_POS + Slide_Posistion_relative);
         lSR.setTargetPosition(LSR_OG_POS + Slide_Posistion_relative);
         lSF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
