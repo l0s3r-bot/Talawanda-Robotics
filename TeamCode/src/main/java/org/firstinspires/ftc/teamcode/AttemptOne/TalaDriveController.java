@@ -43,12 +43,12 @@ public class TalaDriveController  {
 
 
     public void handleControlsInLoop(LinearOpMode opMode, WebcamHandler cam){
-      double driveSpeedCoefficient = opMode.gamepad1.left_trigger/2;
-      double drive = -(opMode.gamepad1.left_stick_y / driveSpeedCoefficient); // Reduce drive rate to 50%.
-      double strafe = -(opMode.gamepad1.left_stick_x / driveSpeedCoefficient); // Reduce strafe rate to 50%.
-      double turn = 0;
+      double driveSpeedCoefficient = (1 - (opMode.gamepad1.left_trigger * .75) + opMode.gamepad1.right_trigger);
+      double drive = opMode.gamepad1.left_stick_y * driveSpeedCoefficient; // Reduce drive rate to 50%.
+      double strafe = opMode.gamepad1.left_stick_x * driveSpeedCoefficient; // Reduce strafe rate to 50%.
+      double turn;
       if (!opMode.gamepad1.left_bumper || (cam.getTargetHeading() == null)) {
-          turn = -(opMode.gamepad1.right_stick_x / driveSpeedCoefficient);  // Reduce turn rate to 33%.
+          turn = opMode.gamepad1.right_stick_x * driveSpeedCoefficient;  // Reduce turn rate to 33%.
 
       } else {
           turn = cam.getTargetHeading();
@@ -63,10 +63,10 @@ public class TalaDriveController  {
 
     public void driveBot(double drive, double strafe, double turn) {
         
-      double frontLeftPower    =  drive - strafe - turn;
-      double frontRightPower   =  drive + strafe + turn;
-      double backLeftPower     =  drive + strafe - turn;
-      double backRightPower    =  drive - strafe + turn;
+      double frontLeftPower    =  drive + strafe + turn;
+      double frontRightPower   =  drive - strafe - turn;
+      double backLeftPower     =  drive - strafe + turn;
+      double backRightPower    =  drive + strafe - turn;
 
       double max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
       max = Math.max(max, Math.abs(backLeftPower));
@@ -89,6 +89,7 @@ public class TalaDriveController  {
 
 
 
+
     public void addTelemetryOutput(LinearOpMode opMode){
         opMode.telemetry.addLine("Press A to reset Yaw");
         opMode.telemetry.addLine("Hold left bumper to drive in robot relative");
@@ -96,6 +97,7 @@ public class TalaDriveController  {
         opMode.telemetry.addLine("Moving the right joystick left and right turns the robot");
         opMode.telemetry.addLine("Press right bumper to enter crawl mode");
     }
+
 
 
     }
