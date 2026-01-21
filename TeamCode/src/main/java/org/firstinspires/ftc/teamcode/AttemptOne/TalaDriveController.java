@@ -11,10 +11,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class TalaDriveController  {
-  public DcMotor mBL;
-  public DcMotor mFL;
-  public DcMotor mFR;
-  public DcMotor mBR;
+    public DcMotor mBL;
+    public DcMotor mFL;
+    public DcMotor mFR;
+    public DcMotor mBR;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -27,9 +27,10 @@ public class TalaDriveController  {
     mBR = opMode.hardwareMap.get(DcMotor.class, "mBR");
 
 
-    mBR.setDirection(DcMotor.Direction.REVERSE);
-    mFR.setDirection(DcMotor.Direction.REVERSE);
-
+      mBR.setDirection(DcMotor.Direction.REVERSE);
+      mFR.setDirection(DcMotor.Direction.REVERSE);
+      mBL.setDirection(DcMotor.Direction.FORWARD);
+      mFL.setDirection(DcMotor.Direction.FORWARD);
     // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder wires, you should remove these
     mFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     mFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -44,7 +45,7 @@ public class TalaDriveController  {
 
     public void handleControlsInLoop(LinearOpMode opMode, WebcamHandler cam){
       double driveSpeedCoefficient = (1 - (opMode.gamepad1.left_trigger * .75) + opMode.gamepad1.right_trigger);
-      double drive = opMode.gamepad1.left_stick_y * driveSpeedCoefficient; // Reduce drive rate to 50%.
+      double drive = -(opMode.gamepad1.left_stick_y * driveSpeedCoefficient); // Reduce drive rate to 50%.
       double strafe = opMode.gamepad1.left_stick_x * driveSpeedCoefficient; // Reduce strafe rate to 50%.
       double turn;
       if (!opMode.gamepad1.left_bumper || (cam.getTargetHeading() == null)) {
@@ -91,8 +92,6 @@ public class TalaDriveController  {
 
 
     public void addTelemetryOutput(LinearOpMode opMode){
-        opMode.telemetry.addLine("Press A to reset Yaw");
-        opMode.telemetry.addLine("Hold left bumper to drive in robot relative");
         opMode.telemetry.addLine("The left joystick sets the robot direction");
         opMode.telemetry.addLine("Moving the right joystick left and right turns the robot");
         opMode.telemetry.addLine("Press right bumper to enter crawl mode");
