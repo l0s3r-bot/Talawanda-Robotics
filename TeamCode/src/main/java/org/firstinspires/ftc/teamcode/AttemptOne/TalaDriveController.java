@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 public class TalaDriveController  {
     public DcMotor mBL;
@@ -43,16 +44,76 @@ public class TalaDriveController  {
 
 
 
-    public void handleControlsInLoop(LinearOpMode opMode, WebcamHandler cam){
+    public void handleControlsInLoop(MainLoop opMode, WebcamHandler cam){
       double driveSpeedCoefficient = (1 - (opMode.gamepad1.left_trigger * .75) + opMode.gamepad1.right_trigger);
       double drive = -(opMode.gamepad1.left_stick_y * driveSpeedCoefficient); // Reduce drive rate to 50%.
       double strafe = opMode.gamepad1.left_stick_x * driveSpeedCoefficient; // Reduce strafe rate to 50%.
-      double turn;
-      if (!opMode.gamepad1.left_bumper || (cam.getTargetHeading() == null)) {
-          turn = opMode.gamepad1.right_stick_x * driveSpeedCoefficient;  // Reduce turn rate to 33%.
+      double turn = 0.0;
 
-      } else {
+      boolean useManualControls = true;
+
+
+      if (opMode.gamepad1.left_bumper && (cam.getTargetHeading() != null)) {
+          useManualControls = false;
           turn = cam.getTargetHeading();
+      }
+        else if (opMode.gamepad1.right_bumper || opMode.gamepad1.right_trigger > 0){
+          AprilTagDetection detection = cam.getEnemyTargetDetection();
+
+          if( detection != null){
+              turn = drive = strafe = 0;
+
+              useManualControls = false;
+              //target range ~ 98.6
+              //target bearing ~ -16.9 - blue
+
+              double idealBearing =  opMode.parking_bearing();
+              double currentBearing = detection.ftcPose.bearing;
+              double bearingDelta = currentBearing - idealBearing;
+              if( Math.abs(bearingDelta) < .01 ){
+                  turn = 0; //do nothing
+              }
+              else if( Math.abs(bearingDelta) < 2 ){
+                  turn = -bearingDelta / 300.0; //do smaller movements near the end
+              }
+              else{
+                  turn = -bearingDelta / 100.0;
+              }
+
+
+              double idealRange = opMode.parking_range();
+              double currentRange = detection.ftcPose.range;
+              double rangeDelta = currentRange - idealRange;
+              if( Math.abs(rangeDelta) < .1 ){
+                  drive = 0; //do nothing
+              }
+              else if( Math.abs(rangeDelta) < .3 ){
+                  drive = rangeDelta / 100.0; //do smaller movements near the end
+              }
+              else{
+                  drive = rangeDelta / 10.0;
+              }
+
+              if( drive > 0 ){
+                  turn = 0; //dont try to adjust both range and bearing at the same time, range goes first
+              }
+
+
+              opMode.telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+              opMode.telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+              opMode.telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+              opMode.telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+
+              opMode.telemetry.addLine(String.format("\n drive %f -> turn %f", drive, turn));
+          }
+
+          if(!opMode.gamepad1.right_bumper){
+              drive = 0;
+              turn = 0;
+          }
+      }
+      if( useManualControls ) {
+          turn = opMode.gamepad1.right_stick_x * driveSpeedCoefficient;  // Reduce turn rate to 33%.
       }
       driveBot(drive, strafe, turn);
 

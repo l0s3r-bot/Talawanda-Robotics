@@ -16,6 +16,7 @@ public class WebcamHandler {
 
     double MARGIN_OF_ERROR = 1.5;
     int current_tag_id= 0;
+    int enemy_tag_id=0;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -28,6 +29,7 @@ public class WebcamHandler {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+
     public void initialize (MainLoop opMode){
 
         // Create the AprilTag processor the easy way.
@@ -48,11 +50,19 @@ public class WebcamHandler {
         if (opMode.team_color().equals("BLUE"))
         {
             current_tag_id = BLUE_TAG_ID;
+            enemy_tag_id = RED_TAG_ID;
         }
         else if (opMode.team_color().equals("RED"))
         {
             current_tag_id = RED_TAG_ID;
+            enemy_tag_id = BLUE_TAG_ID;
         }
+
+        //ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // TEMP CODE - AT HOME TEST... REMOVE FOR COMP
+        enemy_tag_id = 22;
+
+
     }   // end method initAprilTag()
 
     public Double getTargetHeading(){
@@ -82,6 +92,21 @@ public class WebcamHandler {
             if (detection.id == current_tag_id) {
                 return detection;
             }
+
+
+        }
+
+        return null;
+    }
+    public AprilTagDetection getEnemyTargetDetection(){
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+        for (AprilTagDetection detection : currentDetections) {
+
+            if (detection.id == enemy_tag_id) {
+                return detection;
+            }
+
 
         }
 

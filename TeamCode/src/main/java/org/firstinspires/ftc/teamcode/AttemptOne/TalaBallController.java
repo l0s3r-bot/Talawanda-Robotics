@@ -28,9 +28,9 @@ public class TalaBallController{
 
     public void initialize (LinearOpMode opMode) {
 
-         ballLiftWheel = opMode.hardwareMap.get(CRServo.class, "ballLiftWheel");
-         intakeWheel = opMode.hardwareMap.get(CRServo.class, "intakeWheel");
-         transferWheelLeft = opMode.hardwareMap.get(CRServo.class,"transferWheelLeft");
+        ballLiftWheel = opMode.hardwareMap.get(CRServo.class, "ballLiftWheel");
+        intakeWheel = opMode.hardwareMap.get(CRServo.class, "intakeWheel");
+        transferWheelLeft = opMode.hardwareMap.get(CRServo.class,"transferWheelLeft");
         transferWheelRight = opMode.hardwareMap.get(CRServo.class,"transferWheelRight");
 
         intakeWheel.setDirection(DcMotor.Direction.FORWARD);

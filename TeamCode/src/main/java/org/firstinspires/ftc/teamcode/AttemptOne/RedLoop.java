@@ -9,4 +9,8 @@ public class RedLoop extends MainLoop {
     public String team_color(){
         return "RED";
     }
+    @Override
+    public Double parking_bearing(){
+        return 16.6;
+    }
 }
