@@ -9,6 +9,12 @@ public class MainLoop extends LinearOpMode {
     public String team_color(){
         return "";
     }
+    public Double parking_bearing(){
+        return 0.0;
+    }
+    public Double parking_range(){
+        return 98.6;
+    }
 
     TalaDriveController driveController;
     TalaBallController launcherController;
