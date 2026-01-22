@@ -57,12 +57,6 @@ public class WebcamHandler {
             current_tag_id = RED_TAG_ID;
             enemy_tag_id = BLUE_TAG_ID;
         }
-
-        //ALERT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // TEMP CODE - AT HOME TEST... REMOVE FOR COMP
-        enemy_tag_id = 22;
-
-
     }   // end method initAprilTag()
 
     public Double getTargetHeading(){

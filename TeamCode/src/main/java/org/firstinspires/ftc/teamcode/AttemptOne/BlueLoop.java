@@ -13,5 +13,9 @@ public class BlueLoop extends MainLoop {
     public Double parking_bearing(){
         return -16.6;
     }
+    @Override
+    public Double parking_range(){
+        return 98.6;
+    }
 }
 
