@@ -25,6 +25,9 @@ public class TalaBallController{
 
     boolean toggleButtonPressed = false;
     boolean intakeRunning = false;
+    boolean launcherToggleButtonPressed = false;
+    boolean launcherRunning = false;
+
 
     public void initialize (LinearOpMode opMode) {
 
@@ -60,8 +63,23 @@ public class TalaBallController{
     }
 
     public void handleLauncherControlsInLoop(LinearOpMode opMode) {
+
+        launcherRPM += Math.round(opMode.gamepad2.right_stick_y * 20);
+
         launcherTPS = (launcherRPM * 28) / 60.0;
-        if (opMode.gamepad2.right_bumper) {
+
+        if (opMode.gamepad2.right_bumper && !launcherToggleButtonPressed)
+        {
+            launcherRunning = !launcherRunning;
+            launcherToggleButtonPressed = true;
+        }
+        else if (!opMode.gamepad1.b)
+        {
+            launcherToggleButtonPressed = false;
+        }
+
+        if (launcherRunning) {
+
             ((DcMotorEx) launcherFront).setVelocity(launcherTPS);
             ((DcMotorEx) launcherRear).setVelocity(launcherTPS);
         } else {
@@ -74,12 +92,12 @@ public class TalaBallController{
         } else {
             launcherPrimer.setPower(0);
         }
-        launcherRPM += Math.round(opMode.gamepad2.right_stick_y * 20);
+
 
         if (opMode.gamepad1.b && !toggleButtonPressed)
         {
             intakeRunning = !intakeRunning;
-                       toggleButtonPressed = true;
+            toggleButtonPressed = true;
         }
         else if (!opMode.gamepad1.b)
         {
@@ -102,11 +120,11 @@ public class TalaBallController{
 
         if (opMode.gamepad2.dpad_up)
         {
-            tiltValue += .0033;
+            tiltValue -= .0033;
         }
         if (opMode.gamepad2.dpad_down)
         {
-            tiltValue -= .0033;
+            tiltValue += .0033;
         }
         if (tiltValue < .43)
         {

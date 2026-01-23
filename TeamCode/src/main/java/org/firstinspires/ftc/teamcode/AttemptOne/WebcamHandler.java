@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -30,6 +31,11 @@ public class WebcamHandler {
      */
     private VisionPortal visionPortal;
 
+
+//    ExposureControl myExposureControl;
+
+
+
     public void initialize (MainLoop opMode){
 
         // Create the AprilTag processor the easy way.
@@ -37,8 +43,12 @@ public class WebcamHandler {
 
         // Create the vision portal the easy way.
         if (USE_WEBCAM) {
+            WebcamName webcam = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
             visionPortal = VisionPortal.easyCreateWithDefaults(
-                    opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
+                    webcam, aprilTag);
+//            myExposureControl = webcam.getControl(ExposureControl.class);
+//            myExposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
+
         } else {
             visionPortal = VisionPortal.easyCreateWithDefaults(
                     BuiltinCameraDirection.BACK, aprilTag);

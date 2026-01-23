@@ -74,10 +74,10 @@ public class TalaDriveController  {
                   turn = 0; //do nothing
               }
               else if( Math.abs(bearingDelta) < 2 ){
-                  turn = -bearingDelta / 300.0; //do smaller movements near the end
+                  turn = -bearingDelta / 50.0; //do smaller movements near the end
               }
               else{
-                  turn = -bearingDelta / 100.0;
+                  turn = -bearingDelta / 10.0;
               }
 
 
@@ -94,9 +94,9 @@ public class TalaDriveController  {
                   drive = rangeDelta / 10.0;
               }
 
-              if( drive > 0 ){
-                  turn = 0; //dont try to adjust both range and bearing at the same time, range goes first
-              }
+//              if( drive > 0 ){
+//                  turn = 0; //dont try to adjust both range and bearing at the same time, range goes first
+//              }
 
 
               opMode.telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
