@@ -26,12 +26,6 @@ public class WebcamHandler {
      */
     private AprilTagProcessor aprilTag;
 
-    /**
-     * The variable to store our instance of the vision portal.
-     */
-    private VisionPortal visionPortal;
-
-
 
     public void initialize (MainLoop opMode){
 
@@ -41,14 +35,14 @@ public class WebcamHandler {
         // Create the vision portal the easy way.
         if (USE_WEBCAM) {
             WebcamName webcam = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-            visionPortal = VisionPortal.easyCreateWithDefaults(
+            VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
                     webcam, aprilTag);
 
             ExposureControl myExposureControl = visionPortal.getCameraControl(ExposureControl.class);
             myExposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
 
         } else {
-            visionPortal = VisionPortal.easyCreateWithDefaults(
+            VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
                     BuiltinCameraDirection.BACK, aprilTag);
         }
         // Set current_tag_id to the target goal
@@ -81,7 +75,7 @@ public class WebcamHandler {
                 //turn faster if we are way off target
                 limitFactor = 10.0;
             }
-            return detection.ftcPose.bearing / 50.0;
+            return detection.ftcPose.bearing / limitFactor;
         }
 
 
