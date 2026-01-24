@@ -115,7 +115,7 @@ public class TalaDriveController  {
       if( useManualControls ) {
           turn = opMode.gamepad1.right_stick_x * driveSpeedCoefficient;  // Reduce turn rate to 33%.
       }
-      driveBot(drive, strafe, turn);
+      driveBot(opMode, drive, strafe, turn);
 
 
 
@@ -123,7 +123,7 @@ public class TalaDriveController  {
 
 
 
-    public void driveBot(double drive, double strafe, double turn) {
+    public void driveBot(LinearOpMode opMode, double drive, double strafe, double turn) {
         
       double frontLeftPower    =  drive + strafe + turn;
       double frontRightPower   =  drive - strafe - turn;
@@ -141,11 +141,10 @@ public class TalaDriveController  {
           backRightPower /= max;
       }
 
-
-          mFL.setPower(frontLeftPower);
-          mFR.setPower(frontRightPower);
-          mBL.setPower(backLeftPower);
-          mBR.setPower(backRightPower);
+      mFL.setPower(frontLeftPower);
+      mFR.setPower(frontRightPower);
+      mBL.setPower(backLeftPower);
+      mBR.setPower(backRightPower);
 
   }
 
@@ -159,5 +158,16 @@ public class TalaDriveController  {
     }
 
 
+    public void autonomousModeSimpleDrive(LinearOpMode opMode){
+        opMode.waitForStart();
 
+        ElapsedTime runtime = new ElapsedTime();
+        while (runtime.seconds() <= 2.0) {
+            this.driveBot(opMode, 1, 0 ,0);
+        }
+        this.driveBot(opMode, 0, 0 ,0);
     }
+
+
+
+}
