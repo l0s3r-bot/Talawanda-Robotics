@@ -9,11 +9,17 @@ public class MainLoop extends LinearOpMode {
     public String team_color(){
         return "";
     }
+    public Double parking_bearing(){
+        return 0.0;
+    }
+    public Double parking_range(){
+        return 98.6;
+    }
 
     TalaDriveController driveController;
     TalaBallController launcherController;
-    //WebcamHandler Webcam;
-    //TalaSlideLiftController slideController;
+    WebcamHandler Webcam;
+    TalaSlideLiftController slideController;
 
   /**
    * This OpMode illustrates how to program your robot to drive field relative. This means
@@ -29,29 +35,32 @@ public class MainLoop extends LinearOpMode {
   public void runOpMode() {
         driveController = new TalaDriveController();
         launcherController = new TalaBallController();
-        //Webcam = new WebcamHandler();
-        //slideController = new TalaSlideLiftController();
+        Webcam = new WebcamHandler();
+        slideController = new TalaSlideLiftController();
 
         driveController.initialize(this);
         launcherController.initialize(this);
-        //Webcam.initialize(this);
-        //slideController.slide_init(this);
+        Webcam.initialize(this);
+        slideController.slide_init(this);
 
     waitForStart();
       // Put run blocks here.
+
+
+
       while (opModeIsActive()) {
         // Put loop blocks here.
-            //driveController.handleControlsInLoop(this , Webcam);
+            driveController.handleControlsInLoop(this , Webcam);
             launcherController.handleLauncherControlsInLoop(this);
-            //slideController.handleSlideControlsInLoop(this);
+            slideController.handleSlideControlsInLoop(this, launcherController.getKillSwitch());
 
 
             driveController.addTelemetryOutput(this);
             launcherController.launcherTelemetry(this);
-            //Webcam.telemetryAprilTag(this, team_color()); //Change string to change teams!
-            //slideController.slideTelemetry(this);
-       
-   
+            Webcam.telemetryAprilTag(this, team_color()); //Change string to change teams!
+            slideController.slideTelemetry(this);
+
+
             telemetry.update();
       } //ends while loop
   }

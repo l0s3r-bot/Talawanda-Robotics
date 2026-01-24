@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -16,6 +17,7 @@ public class WebcamHandler {
 
     double MARGIN_OF_ERROR = 1.5;
     int current_tag_id= 0;
+    int enemy_tag_id=0;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -24,10 +26,7 @@ public class WebcamHandler {
      */
     private AprilTagProcessor aprilTag;
 
-    /**
-     * The variable to store our instance of the vision portal.
-     */
-    private VisionPortal visionPortal;
+
     public void initialize (MainLoop opMode){
 
         // Create the AprilTag processor the easy way.
@@ -35,10 +34,15 @@ public class WebcamHandler {
 
         // Create the vision portal the easy way.
         if (USE_WEBCAM) {
-            visionPortal = VisionPortal.easyCreateWithDefaults(
-                    opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
+            WebcamName webcam = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
+            VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
+                    webcam, aprilTag);
+
+//            ExposureControl myExposureControl = visionPortal.getCameraControl(ExposureControl.class);
+//            myExposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
+
         } else {
-            visionPortal = VisionPortal.easyCreateWithDefaults(
+            VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
                     BuiltinCameraDirection.BACK, aprilTag);
         }
         // Set current_tag_id to the target goal
@@ -48,10 +52,12 @@ public class WebcamHandler {
         if (opMode.team_color().equals("BLUE"))
         {
             current_tag_id = BLUE_TAG_ID;
+            enemy_tag_id = RED_TAG_ID;
         }
         else if (opMode.team_color().equals("RED"))
         {
             current_tag_id = RED_TAG_ID;
+            enemy_tag_id = BLUE_TAG_ID;
         }
     }   // end method initAprilTag()
 
@@ -69,7 +75,7 @@ public class WebcamHandler {
                 //turn faster if we are way off target
                 limitFactor = 10.0;
             }
-            return detection.ftcPose.bearing / 50.0;
+            return detection.ftcPose.bearing / limitFactor;
         }
 
 
@@ -82,6 +88,21 @@ public class WebcamHandler {
             if (detection.id == current_tag_id) {
                 return detection;
             }
+
+
+        }
+
+        return null;
+    }
+    public AprilTagDetection getEnemyTargetDetection(){
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+        for (AprilTagDetection detection : currentDetections) {
+
+            if (detection.id == enemy_tag_id) {
+                return detection;
+            }
+
 
         }
 

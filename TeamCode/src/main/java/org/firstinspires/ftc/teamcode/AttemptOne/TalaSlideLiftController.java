@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.AttemptOne;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -10,6 +9,8 @@ public class TalaSlideLiftController {
   int Slide_Posistion_relative;
   int LSR_OG_POS;
   int LSF_OG_POS;
+  int killSwitchCount = 0;
+
 
 
 public void slide_init(LinearOpMode opMode) {
@@ -19,16 +20,40 @@ public void slide_init(LinearOpMode opMode) {
     lSF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     lSR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+    lSR.setDirection(DcMotor.Direction.REVERSE);
+
     Slide_Posistion_relative = 0;
     LSR_OG_POS = lSR.getCurrentPosition();
     LSF_OG_POS = lSF.getCurrentPosition();
-    Slide_Speed_Multiplier = 75;
+    Slide_Speed_Multiplier = 50;
 }
 
-    public void handleSlideControlsInLoop(LinearOpMode opMode) {
-        Slide_Posistion_relative += Math.round(Slide_Speed_Multiplier * opMode.gamepad2.left_stick_y);
-        lSF.setTargetPosition(LSF_OG_POS + Slide_Posistion_relative);
-        lSR.setTargetPosition(LSR_OG_POS + Slide_Posistion_relative);
+    public void handleSlideControlsInLoop(LinearOpMode opMode, boolean killSwitch) {
+        if (opMode.gamepad2.y) {
+            Slide_Posistion_relative += Slide_Speed_Multiplier;
+        }
+        if (opMode.gamepad2.a) {
+            Slide_Posistion_relative -= Slide_Speed_Multiplier;
+        }
+        if (Slide_Posistion_relative <= -5800) {
+            Slide_Posistion_relative = -5800;
+        }
+        if (Slide_Posistion_relative >= 0) {
+            Slide_Posistion_relative = 0;
+        }
+
+        if (!killSwitch) {
+            lSF.setTargetPosition(LSF_OG_POS + Slide_Posistion_relative);
+            lSR.setTargetPosition(LSR_OG_POS + Slide_Posistion_relative);
+        }
+        else {
+            killSwitchCount += 1;
+            if (killSwitchCount == 1) {
+                lSF.setTargetPosition(lSF.getCurrentPosition());
+                lSR.setTargetPosition(lSR.getCurrentPosition());
+            }
+        }
+
         lSF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lSR.setPower(0.5);
