@@ -52,7 +52,7 @@ public class MainLoop extends LinearOpMode {
         // Put loop blocks here.
             driveController.handleControlsInLoop(this , Webcam);
             launcherController.handleLauncherControlsInLoop(this);
-            slideController.handleSlideControlsInLoop(this);
+            slideController.handleSlideControlsInLoop(this, launcherController.getKillSwitch());
 
 
             driveController.addTelemetryOutput(this);

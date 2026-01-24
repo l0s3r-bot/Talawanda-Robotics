@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class TalaBallController{
@@ -27,6 +26,7 @@ public class TalaBallController{
     boolean intakeRunning = false;
     boolean launcherToggleButtonPressed = false;
     boolean launcherRunning = false;
+    boolean killSwitch = false;
 
 
     public void initialize (LinearOpMode opMode) {
@@ -61,14 +61,13 @@ public class TalaBallController{
         opMode.telemetry.addData("launcherRPM", launcherRPM);
         opMode.telemetry.addData("LauncherTPS", launcherTPS);
     }
-
     public void handleLauncherControlsInLoop(LinearOpMode opMode) {
 
         launcherRPM += Math.round(opMode.gamepad2.right_stick_y * 20);
 
         launcherTPS = (launcherRPM * 28) / 60.0;
 
-        if (opMode.gamepad2.right_bumper && !launcherToggleButtonPressed)
+        if (opMode.gamepad2.right_bumper && !launcherToggleButtonPressed) //launcher flywheel toggle
         {
             launcherRunning = !launcherRunning;
             launcherToggleButtonPressed = true;
@@ -78,7 +77,7 @@ public class TalaBallController{
             launcherToggleButtonPressed = false;
         }
 
-        if (launcherRunning) {
+        if (launcherRunning && !killSwitch) {
 
             ((DcMotorEx) launcherFront).setVelocity(launcherTPS);
             ((DcMotorEx) launcherRear).setVelocity(launcherTPS);
@@ -87,14 +86,14 @@ public class TalaBallController{
             ((DcMotorEx) launcherRear).setVelocity(0);
         }
 
-        if (opMode.gamepad2.left_bumper) {
+        if (opMode.gamepad2.left_bumper && killSwitch) { //launcher primer
             launcherPrimer.setPower(1);
         } else {
             launcherPrimer.setPower(0);
         }
 
 
-        if (opMode.gamepad1.b && !toggleButtonPressed)
+        if (opMode.gamepad1.b && !toggleButtonPressed) //intake toggle
         {
             intakeRunning = !intakeRunning;
             toggleButtonPressed = true;
@@ -104,7 +103,7 @@ public class TalaBallController{
             toggleButtonPressed = false;
         }
 
-        if (intakeRunning)
+        if (intakeRunning && !killSwitch)
         {
             ballLiftWheel.setPower(1);
             intakeWheel.setPower(1);
@@ -117,6 +116,11 @@ public class TalaBallController{
             transferWheelLeft.setPower(0);
             transferWheelRight.setPower(0);
         }
+
+        if (opMode.gamepad1.guide && opMode.gamepad1.left_stick_button || opMode.gamepad2.left_stick_button && opMode.gamepad2.guide) {
+            killSwitch = true;
+        }
+
 
         if (opMode.gamepad2.dpad_up)
         {
@@ -145,6 +149,10 @@ public class TalaBallController{
         launcherRear.setDirection(DcMotor.Direction.REVERSE);
         launcherRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcherFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public boolean getKillSwitch () {
+        return killSwitch;
     }
 
 }

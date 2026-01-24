@@ -1,7 +1,4 @@
 package org.firstinspires.ftc.teamcode.AttemptOne;
-
-import android.transition.Slide;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -30,7 +27,7 @@ public void slide_init(LinearOpMode opMode) {
     Slide_Speed_Multiplier = 50;
 }
 
-    public void handleSlideControlsInLoop(LinearOpMode opMode) {
+    public void handleSlideControlsInLoop(LinearOpMode opMode, boolean killSwitch) {
         if (opMode.gamepad2.y) {
             Slide_Posistion_relative += Slide_Speed_Multiplier;
         }
@@ -44,9 +41,15 @@ public void slide_init(LinearOpMode opMode) {
             Slide_Posistion_relative = 0;
         }
 
-        // TODO: 1/18/26 change so does not activeate on m button on rear, perhaps change launcher tilt to gamepad1 left stick y
-        lSF.setTargetPosition(LSF_OG_POS + Slide_Posistion_relative);
-        lSR.setTargetPosition(LSR_OG_POS + Slide_Posistion_relative);
+        if (!killSwitch) {
+            lSF.setTargetPosition(LSF_OG_POS + Slide_Posistion_relative);
+            lSR.setTargetPosition(LSR_OG_POS + Slide_Posistion_relative);
+        }
+        else {
+            lSF.setTargetPosition(lSF.getCurrentPosition());
+            lSR.setTargetPosition(lSR.getCurrentPosition());
+        }
+
         lSF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lSR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lSR.setPower(0.5);
