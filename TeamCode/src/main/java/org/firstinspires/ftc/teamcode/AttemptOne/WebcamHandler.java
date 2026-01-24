@@ -32,9 +32,6 @@ public class WebcamHandler {
     private VisionPortal visionPortal;
 
 
-//    ExposureControl myExposureControl;
-
-
 
     public void initialize (MainLoop opMode){
 
@@ -46,8 +43,9 @@ public class WebcamHandler {
             WebcamName webcam = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
             visionPortal = VisionPortal.easyCreateWithDefaults(
                     webcam, aprilTag);
-//            myExposureControl = webcam.getControl(ExposureControl.class);
-//            myExposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
+
+            ExposureControl myExposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            myExposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
 
         } else {
             visionPortal = VisionPortal.easyCreateWithDefaults(
