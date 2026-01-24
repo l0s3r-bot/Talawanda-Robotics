@@ -9,6 +9,7 @@ public class TalaSlideLiftController {
   int Slide_Posistion_relative;
   int LSR_OG_POS;
   int LSF_OG_POS;
+  int killSwitchCount = 0;
 
 
 
@@ -46,8 +47,11 @@ public void slide_init(LinearOpMode opMode) {
             lSR.setTargetPosition(LSR_OG_POS + Slide_Posistion_relative);
         }
         else {
-            lSF.setTargetPosition(lSF.getCurrentPosition());
-            lSR.setTargetPosition(lSR.getCurrentPosition());
+            killSwitchCount += 1;
+            if (killSwitchCount == 1) {
+                lSF.setTargetPosition(lSF.getCurrentPosition());
+                lSR.setTargetPosition(lSR.getCurrentPosition());
+            }
         }
 
         lSF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
