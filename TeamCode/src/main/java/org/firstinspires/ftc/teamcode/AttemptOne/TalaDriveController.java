@@ -1,14 +1,8 @@
 package org.firstinspires.ftc.teamcode.AttemptOne;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 public class TalaDriveController  {
@@ -16,9 +10,6 @@ public class TalaDriveController  {
     public DcMotor mFL;
     public DcMotor mFR;
     public DcMotor mBR;
-
-    private ElapsedTime runtime = new ElapsedTime();
-
     
   public void initialize(LinearOpMode opMode){
 
@@ -26,7 +17,6 @@ public class TalaDriveController  {
     mFL = opMode.hardwareMap.get(DcMotor.class, "mFL");
     mFR = opMode.hardwareMap.get(DcMotor.class, "mFR");
     mBR = opMode.hardwareMap.get(DcMotor.class, "mBR");
-
 
       mBR.setDirection(DcMotor.Direction.REVERSE);
       mFR.setDirection(DcMotor.Direction.REVERSE);
@@ -61,7 +51,9 @@ public class TalaDriveController  {
           AprilTagDetection detection = cam.getEnemyTargetDetection();
 
           if( detection != null){
-              turn = drive = strafe = 0;
+              turn = 0;
+              drive = 0;
+              strafe = 0;
 
               useManualControls = false;
               //target range ~ 98.6
