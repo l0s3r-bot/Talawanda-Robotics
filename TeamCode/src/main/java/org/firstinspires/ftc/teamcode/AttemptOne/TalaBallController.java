@@ -86,7 +86,7 @@ public class TalaBallController{
             ((DcMotorEx) launcherRear).setVelocity(0);
         }
 
-        if (opMode.gamepad2.left_bumper && killSwitch) { //launcher primer
+        if (opMode.gamepad2.left_bumper && !killSwitch) { //launcher primer
             launcherPrimer.setPower(1);
         } else {
             launcherPrimer.setPower(0);

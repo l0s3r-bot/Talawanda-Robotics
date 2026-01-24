@@ -38,8 +38,8 @@ public class WebcamHandler {
             VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
                     webcam, aprilTag);
 
-            ExposureControl myExposureControl = visionPortal.getCameraControl(ExposureControl.class);
-            myExposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
+//            ExposureControl myExposureControl = visionPortal.getCameraControl(ExposureControl.class);
+//            myExposureControl.setMode(ExposureControl.Mode.ContinuousAuto);
 
         } else {
             VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
