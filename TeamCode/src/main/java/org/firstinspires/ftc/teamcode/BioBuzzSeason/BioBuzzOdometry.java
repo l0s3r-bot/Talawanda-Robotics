@@ -1,18 +1,19 @@
 package org.firstinspires.ftc.teamcode.BioBuzzSeason;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "BioBuzzDriver")
+@Autonomous(name = "BioBuzzDriver")
 public class BioBuzzOdometry extends LinearOpMode {
 
     public DcMotor mBL;
     public DcMotor mFL;
     public DcMotor mFR;
     public DcMotor mBR;
-    private DcMotor ballIntake;
+    //private DcMotor ballIntake;
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double     FORWARD_SPEED = 0.6;
@@ -31,7 +32,7 @@ public class BioBuzzOdometry extends LinearOpMode {
         mFL = hardwareMap.get(DcMotor.class, "mFL");
         mFR = hardwareMap.get(DcMotor.class, "mFR");
         mBR = hardwareMap.get(DcMotor.class, "mBR");
-        ballIntake = hardwareMap.get(DcMotor.class, "ballIntake");
+        //ballIntake = hardwareMap.get(DcMotor.class, "ballIntake");
 
         mBR.setDirection(DcMotor.Direction.REVERSE);
         mFR.setDirection(DcMotor.Direction.REVERSE);
