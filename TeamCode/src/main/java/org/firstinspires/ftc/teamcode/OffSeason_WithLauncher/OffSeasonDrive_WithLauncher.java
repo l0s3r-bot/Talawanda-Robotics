@@ -1,0 +1,135 @@
+package org.firstinspires.ftc.teamcode.OffSeason_WithLauncher;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+public class OffSeasonDrive_WithLauncher {
+    public DcMotor mBL;
+    public DcMotor mFL;
+    public DcMotor mFR;
+    public DcMotor mBR;
+
+    public void initialize(LinearOpMode opMode){
+
+        mBL = opMode.hardwareMap.get(DcMotor.class, "mBL");
+        mFL = opMode.hardwareMap.get(DcMotor.class, "mFL");
+        mFR = opMode.hardwareMap.get(DcMotor.class, "mFR");
+        mBR = opMode.hardwareMap.get(DcMotor.class, "mBR");
+
+        mBR.setDirection(DcMotor.Direction.REVERSE);
+        mFR.setDirection(DcMotor.Direction.REVERSE);
+        mBL.setDirection(DcMotor.Direction.FORWARD);
+        mFL.setDirection(DcMotor.Direction.FORWARD);
+
+        // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder wires, you should remove these
+        mFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    }
+
+
+    public void handleControlsInLoop(OffSeasonMain_WithLauncher opMode){
+        double driveSpeedCoefficient = (1 - (opMode.gamepad1.left_trigger * .75) + opMode.gamepad1.right_trigger);
+        double drive = -(opMode.gamepad1.left_stick_y * driveSpeedCoefficient); // Reduce drive rate to 50%.
+        double strafe = opMode.gamepad1.left_stick_x * driveSpeedCoefficient; // Reduce strafe rate to 50%.
+        double turn = opMode.gamepad1.right_stick_x * driveSpeedCoefficient;
+
+
+        /*if (opMode.gamepad1.left_bumper && (cam.getTargetHeading() != null)) {
+            useManualControls = false;
+            turn = cam.getTargetHeading();
+        }
+        else if (opMode.gamepad1.right_bumper || opMode.gamepad1.right_trigger > 0){
+            AprilTagDetection detection = cam.getEnemyTargetDetection();
+
+            if( detection != null){
+                turn = 0;
+                drive = 0;
+                strafe = 0;
+
+                useManualControls = false;
+                //target range ~ 98.6
+                //target bearing ~ -16.9 - blue
+
+                double idealBearing =  opMode.parking_bearing();
+                double currentBearing = detection.ftcPose.bearing;
+                double bearingDelta = currentBearing - idealBearing;
+                if( Math.abs(bearingDelta) < .01 ){
+                    turn = 0; //do nothing
+                }
+                else if( Math.abs(bearingDelta) < 2 ){
+                    turn = -bearingDelta / 50.0; //do smaller movements near the end
+                }
+                else{
+                    turn = -bearingDelta / 10.0;
+                }
+
+
+                double idealRange = opMode.parking_range();
+                double currentRange = detection.ftcPose.range;
+                double rangeDelta = currentRange - idealRange;
+                if( Math.abs(rangeDelta) < .1 ){
+                    drive = 0; //do nothing
+                }
+                else if( Math.abs(rangeDelta) < .3 ){
+                    drive = rangeDelta / 100.0; //do smaller movements near the end
+                }
+                else{
+                    drive = rangeDelta / 10.0;
+                }*/
+
+        driveBot(opMode, drive, strafe, turn);
+
+    }
+
+
+
+    public void driveBot(OffSeasonMain_WithLauncher opMode, double drive, double strafe, double turn) {
+
+        double frontLeftPower    =  drive + strafe + turn;
+        double frontRightPower   =  drive - strafe - turn;
+        double backLeftPower     =  drive - strafe + turn;
+        double backRightPower    =  drive + strafe - turn;
+
+        double max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
+        max = Math.max(max, Math.abs(backLeftPower));
+        max = Math.max(max, Math.abs(backRightPower));
+
+        if (max > 1.0) {
+            frontLeftPower /= max;
+            frontRightPower /= max;
+            backLeftPower /= max;
+            backRightPower /= max;
+        }
+
+        mFL.setPower(frontLeftPower * opMode.opmode_drive_throttle());
+        mFR.setPower(frontRightPower * opMode.opmode_drive_throttle());
+        mBL.setPower(backLeftPower * opMode.opmode_drive_throttle());
+        mBR.setPower(backRightPower * opMode.opmode_drive_throttle());
+
+    }
+
+
+
+
+    public void addTelemetryOutput(LinearOpMode opMode){
+        opMode.telemetry.addLine("The left joystick sets the robot direction");
+        opMode.telemetry.addLine("Moving the right joystick left and right turns the robot");
+    }
+
+
+    /*public void autonomousModeSimpleDrive(LinearOpMode opMode){
+        opMode.waitForStart();
+
+        ElapsedTime runtime = new ElapsedTime();
+        while (runtime.seconds() <= 2.0) {
+            this.driveBot(opMode, 1, 0 ,0);
+        }
+        this.driveBot(opMode, 0, 0 ,0);
+    }*/
+
+
+
+}
