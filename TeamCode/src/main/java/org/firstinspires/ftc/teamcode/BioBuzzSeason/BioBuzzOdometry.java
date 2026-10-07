@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.BioBuzzSeason;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -16,7 +16,12 @@ public class BioBuzzOdometry extends LinearOpMode {
     //private DcMotor ballIntake;
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED = 0.6;
+    //public double mBLrpm;
+    //public double mFLrpm;
+    //public double mFRrpm;
+    //public double mBRrpm;
+
+    static final double     FORWARD_SPEED = 0.4;
     static final double     TURN_SPEED    = 0.5;
 
     /**
@@ -44,45 +49,45 @@ public class BioBuzzOdometry extends LinearOpMode {
         mBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+
         // Put initialization blocks here.
         waitForStart();
-        if (opModeIsActive()) {
             // Put run blocks here.
-            while (opModeIsActive() && (runtime.seconds() < 3.0)) { //incredibly inefficient, I'll fix later (Evan)
-                // Put loop blocks here.
-                mFL.setPower(FORWARD_SPEED);
-                mFR.setPower(FORWARD_SPEED);
-                mBL.setPower(FORWARD_SPEED);
-                mBR.setPower(FORWARD_SPEED);
-            }
-            while (opModeIsActive() && (runtime.seconds() > 3.0) && (runtime.seconds() < 6.0)) {
-                // Put loop blocks here.
-                mFL.setPower(-FORWARD_SPEED);
-                mFR.setPower(-FORWARD_SPEED);
-                mBL.setPower(-FORWARD_SPEED);
-                mBR.setPower(-FORWARD_SPEED);
-            }
-            while (opModeIsActive() && (runtime.seconds() > 6.0) && (runtime.seconds() < 9.0) ) {
-                // Put loop blocks here.
-                mFL.setPower(FORWARD_SPEED);
-                mFR.setPower(FORWARD_SPEED);
-                mBL.setPower(FORWARD_SPEED);
-                mBR.setPower(FORWARD_SPEED);
-            }
-            while (opModeIsActive() && (runtime.seconds() > 9.0) && (runtime.seconds() < 10.0) ) {
-                mFL.setPower(-FORWARD_SPEED);
-                mFR.setPower(FORWARD_SPEED);
-                mBL.setPower(-FORWARD_SPEED);
-                mBR.setPower(FORWARD_SPEED);
-            }
-            while (opModeIsActive() && (runtime.seconds() > 10.0) && (runtime.seconds() < 13.0) ) {
-                // Put loop blocks here.
-                mFL.setPower(FORWARD_SPEED);
-                mFR.setPower(FORWARD_SPEED);
-                mBL.setPower(FORWARD_SPEED);
-                mBR.setPower(FORWARD_SPEED);
-            }
-        }
+            do{
+                if (runtime.seconds() > 3.0 && runtime.seconds() < 6.0){
+                    //moving backwards
+                    mFL.setPower(-FORWARD_SPEED);
+                    mFR.setPower(-FORWARD_SPEED);
+                    mBL.setPower(-FORWARD_SPEED);
+                    mBR.setPower(-FORWARD_SPEED);
+                }
+                else if (runtime.seconds() > 9.0 && runtime.seconds() < 12.3){
+                    //turning
+                    mFL.setPower(-FORWARD_SPEED);
+                    mFR.setPower(FORWARD_SPEED);
+                    mBL.setPower(-FORWARD_SPEED);
+                    mBR.setPower(FORWARD_SPEED);
+                }
+                else if (runtime.seconds() > 15.3){
+                    //not movin
+                    mFL.setPower(0);
+                    mFR.setPower(0);
+                    mBL.setPower(0);
+                    mBR.setPower(0);
+                }
+                else{
+                    //movin forward (obviously)
+                    mFL.setPower(FORWARD_SPEED);
+                    mFR.setPower(FORWARD_SPEED);
+                    mBL.setPower(FORWARD_SPEED);
+                    mBR.setPower(FORWARD_SPEED);
+                }
+                //telemetry.addData("mFL rpm: ",)
+                //telemetry.update();
+
+            } while (opModeIsActive());
+
+
     }
 
 
