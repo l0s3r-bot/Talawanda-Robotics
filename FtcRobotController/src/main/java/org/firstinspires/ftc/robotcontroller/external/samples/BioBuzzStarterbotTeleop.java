@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
  */
 
 @TeleOp(name = "BioBuzz StarterBot Teleop", group = "StarterBot")
-@Disabled
+
 public class BioBuzzStarterbotTeleop extends OpMode {
 
     // Declare OpMode members.

@@ -30,7 +30,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Biobuzz;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
@@ -215,10 +215,10 @@ public class StarterBotAuto extends OpMode
          * servos work to pull elements into the intake.
          */
         rightIntakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        windmillServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        windmillServo.setDirection(CRServo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initializeddddd");
     }
 
     /*
@@ -296,6 +296,8 @@ public class StarterBotAuto extends OpMode
     }
 
     void launch(boolean input) {
+
+        telemetry.addData("in launch", 0);
         if (input) {
             launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
         } else {
@@ -304,6 +306,7 @@ public class StarterBotAuto extends OpMode
 
         if (input && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
             windmillServo.setPower(1);
+            telemetry.addData("windmill set power", 0);
             intakePower += 0.5;
         } else {
             windmillServo.setPower(0);

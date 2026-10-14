@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "BioBuzzDriver")
-public class BioBuzzOdometry extends LinearOpMode {
+public class BioBuzzAuto extends LinearOpMode {
 
     public DcMotor mBL;
     public DcMotor mFL;
