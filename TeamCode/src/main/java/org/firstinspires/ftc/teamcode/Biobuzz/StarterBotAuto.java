@@ -62,6 +62,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * main robot "loop," continuously checking for conditions that allow us to move to the next step.
  */
 
+//TO DO
+//Make bot turn 90 degrees left
+//drive forward
+//turn 90 degrees left
+//turn on input and reverse
+//move forward
+//turn 90 degrees right
+//forwards
+//90 degrees right
+//shoot
+
+
+
+
+
 @Autonomous(name="StarterBotAuto", group="StarterBot")
 //@Disabled
 public class StarterBotAuto extends OpMode
@@ -76,6 +91,7 @@ public class StarterBotAuto extends OpMode
      * in the launch() function to only run the windmill servo when the motor is spinning fast
      * enough to make a successful throw.
      */
+
     public final int LAUNCHER_TARGET_VELOCITY = 1250;
     public final int LAUNCHER_MIN_VELOCITY = 1200;
 
@@ -104,7 +120,7 @@ public class StarterBotAuto extends OpMode
      * of our auto as a whole.
      */
     private ElapsedTime driveTimer = new ElapsedTime();
-    private ElapsedTime autoTimer = new ElapsedTime();
+    public ElapsedTime autoTimer = new ElapsedTime();
 
     // Declare OpMode members.
     private DcMotor leftDrive = null;
@@ -126,7 +142,7 @@ public class StarterBotAuto extends OpMode
      * This allows us to write functions and autonomous routines in a way that avoids
      * loops within loops, and "waits."
      */
-    private enum AutonomousState {
+    enum AutonomousState {
         LAUNCH,
         DRIVE,
         COMPLETE
