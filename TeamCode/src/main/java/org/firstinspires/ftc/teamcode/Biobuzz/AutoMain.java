@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.Biobuzz;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,21 +14,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-public class AutoMain extends OpMode {
-    /*
-     * These two variables are used to control the velocity of the launcher motor.
-     * They are both in encoder ticks per second. The motors we use in the FIRST Tech Challenge
-     * have encoders with a resolution of 28 ticks per revolution. We can convert this to RPM
-     * by dividing the value by 28, to get to revolutions per second, before multiplying by 60
-     * to get revolutions per minute.
-     * We pass the target velocity variable to our motor to set the goal. We use the min velocity
-     * in the launch() function to only run the windmill servo when the motor is spinning fast
-     * enough to make a successful throw.
-     */
+public abstract class AutoMain extends OpMode {
+    enum Alliance {RED, BLUE}
 
-    public String team_color(){
-        return "";
-    }
+    protected abstract Alliance getAlliance();
     public final int LAUNCHER_TARGET_VELOCITY = 1250;
     public final int LAUNCHER_MIN_VELOCITY = 1200;
 
@@ -57,7 +46,7 @@ public class AutoMain extends OpMode {
      * of our auto as a whole.
      */
     private ElapsedTime driveTimer = new ElapsedTime();
-    private ElapsedTime autoTimer = new ElapsedTime();
+    public ElapsedTime autoTimer = new ElapsedTime();
 
     // Declare OpMode members.
     private DcMotor leftDrive = null;
@@ -87,7 +76,7 @@ public class AutoMain extends OpMode {
      * you may have multiple copies of the same enum which have different names.
      * Here we just have one.
      */
-
+    private StarterBotAuto.AutonomousState autonomousState;
 
     /*
      * This code runs ONCE when the driver hits INIT.
@@ -100,7 +89,7 @@ public class AutoMain extends OpMode {
          * the state machine by moving to other enum members.
          * We do the same for our launcher state machine, setting it to IDLE before we use it later.
          */
-
+        autonomousState = StarterBotAuto.AutonomousState.LAUNCH;
 
 
         /*
@@ -164,10 +153,12 @@ public class AutoMain extends OpMode {
          * servos work to pull elements into the intake.
          */
         rightIntakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
-        windmillServo.setDirection(CRServo.Direction.FORWARD);
+//        windmillServo.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initializeddddd");
+        telemetry.addData("Alliance", getAlliance());
+        telemetry.addData("Status", "Initializeddd");
+
     }
 
     /*
@@ -175,6 +166,7 @@ public class AutoMain extends OpMode {
      */
     @Override
     public void init_loop() {
+        telemetry.addData("Alliance", getAlliance());
     }
 
     /*
@@ -199,7 +191,26 @@ public class AutoMain extends OpMode {
          * of the members of the enum for a match, since if we find the "break" line in one case,
          * we know our enum isn't reflecting a different state.
          */
-
+        telemetry.addData("Alliance", getAlliance());
+        telemetry.addData("AutoState", autonomousState);
+        switch (autonomousState) {
+            case LAUNCH:
+                launch(true);
+                if(autoTimer.seconds() > 10){
+                    launch(false);
+                    intakePower = 0;
+                    autonomousState = StarterBotAuto.AutonomousState.DRIVE;
+                }
+                break;
+            case DRIVE:
+                if(drive(DRIVE_SPEED, -120, DistanceUnit.MM, 2)){
+                    autonomousState = StarterBotAuto.AutonomousState.COMPLETE;
+                }
+                break;
+            case COMPLETE:
+                telemetry.addLine("Auto Complete!");
+                break;
+        }
 
         intake.setPower(intakePower);
 
@@ -212,6 +223,7 @@ public class AutoMain extends OpMode {
          * "copy-and-paste" that non-state machine autonomous routines fall into.
          *
          */
+        telemetry.addData("AutoState", autonomousState);
         telemetry.addData("Motor Current Positions", "left (%d), right (%d)",
                 leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition());
         telemetry.addData("Motor Target Positions", "left (%d), right (%d)",
@@ -227,8 +239,6 @@ public class AutoMain extends OpMode {
     }
 
     void launch(boolean input) {
-
-        telemetry.addData("in launch", 0);
         if (input) {
             launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
         } else {
@@ -237,7 +247,6 @@ public class AutoMain extends OpMode {
 
         if (input && launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
             windmillServo.setPower(1);
-            telemetry.addData("windmill set power", 0);
             intakePower += 0.5;
         } else {
             windmillServo.setPower(0);
@@ -332,4 +341,6 @@ public class AutoMain extends OpMode {
 
         return (driveTimer.seconds() > holdSeconds);
     }
+
 }
+
